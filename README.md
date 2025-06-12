@@ -12,3 +12,5 @@ En el perfil:
 
 Ponlo en un servidor que pueda alojar en Java
 1. Subelo a un servidor web
+
+Modal para insert y update
