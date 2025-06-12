@@ -7,12 +7,11 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "perfiles")
-public class Perfil {
+@Table(name = "usuarios")
+public class Usuario {
     @Id
-    private String email;
-
-    private String nombreFull;
-    private String password;
-    private boolean esAdmin;
+    public String email;
+    public String password;
+    public String nombreFull;
+    public String role;
 }
