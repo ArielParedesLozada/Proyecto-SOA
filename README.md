@@ -4,6 +4,7 @@ Loggeo con Spring Security
 Index: Pagina de logeo, hay dos perfiles
 1. Admin : CRUD
 2. Secretaria: Solo Select/Ver
+2. Usa SpringSecurity para el login
 
 En el perfil:
 1. Solo hay un servicio para ingresar usuarios (solo de tipo secretaria)
