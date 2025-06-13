@@ -13,3 +13,10 @@ INSERT INTO usuarios VALUES (
     'Juan Paco Perez',
     'admin'
 );
+
+INSERT INTO usuarios VALUES (
+    'secre@secre.com',
+    '123456789',
+    'Juana Paca Perez',
+    'secretaria'
+);
