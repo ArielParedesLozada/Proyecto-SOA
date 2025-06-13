@@ -2,7 +2,6 @@ package com.grupo5.grupo5.controller;
 
 import java.security.Principal;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +18,4 @@ public class PrivateController {
         model.addAttribute("nombreFull", principal.getName());
         return "home";
     }
-
-    @GetMapping("/admin/add")
-    @PreAuthorize("hasRole('admin')")
-    public String addSecretarias() {
-        return "secretarias";
-    }
-
 }

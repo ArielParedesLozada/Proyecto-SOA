@@ -1,19 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <title>Estudiantes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-light">
     <div class="container mt-5">
-        <h1>Lista Estudiantes</h1>
-        <a type="button" class="btn btn-primary" th:href="@{'/estudiantes/nuevo'}">Nuevo estudiante</a>
-        <form th:action="@{/buscar}" method="get" class="row g-3 mb-4">
+        <h1>Lista de Estudiantes</h1>
+
+        <!-- Botón para agregar -->
+        <div sec:authorize="hasRole('admin')">
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalEstudiante"
+                onclick="abrirModalNuevo()">
+                Nuevo Estudiante
+            </button>
+        </div>
+
+        <!-- Formulario de búsqueda -->
+        <form th:action="@{/user/buscar}" method="get" class="row g-3 mb-4">
             <div class="col-auto">
                 <input type="text" name="cedula" class="form-control" placeholder="Buscar por cédula" required>
             </div>
@@ -21,14 +29,18 @@
                 <button type="submit" class="btn btn-primary mb-3">Buscar</button>
             </div>
         </form>
-        <table class="table table-striped table-bordered">
-            <thead class="table-light">
-                <th>Cedula</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Direccion</th>
-                <th>Telefono</th>
-                <th>Acciones</th>
+
+        <!-- Tabla -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
             </thead>
             <tbody>
                 <tr th:each="estudiante : ${estudiantes}">
@@ -38,29 +50,119 @@
                     <td th:text="${estudiante.direccion}"></td>
                     <td th:text="${estudiante.telefono}"></td>
                     <td>
-                        <a th:href="@{'/estudiante/'+${estudiante.cedula}}" class="btn btn-warning btn-sm">Editar</a>
-                        <button class="btn btn-danger btn-sm eliminar-btn"
-                            th:attr="data-cedula=${estudiante.cedula}">Eliminar</button>
+                        <div sec:authorize="hasRole('admin')">
+                            <button class="btn btn-sm btn-warning editar-btn" data-bs-toggle="modal"
+                                data-bs-target="#modalEstudiante" data-cedula="${estudiante.cedula}"
+                                data-nombre="${estudiante.nombre}" data-apellido="${estudiante.apellido}"
+                                data-direccion="${estudiante.direccion}" data-telefono="${estudiante.telefono}">
+                                Editar
+                            </button>
+                            <button class="btn btn-sm btn-danger eliminar-btn" data-cedula="${estudiante.cedula}">
+                                Eliminar
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+        <!-- Mensaje -->
         <div th:if="${mensaje}" class="alert alert-warning" th:text="${mensaje}"></div>
     </div>
-    <script th:inline="javascript">
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalEstudiante" tabindex="-1" aria-labelledby="modalEstudianteLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form th:action="@{/user/estudiante}" method="post" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEstudianteLabel">Agregar/Editar Estudiante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Cédula</label>
+                        <input id="inputCedula" name="cedula" type="text" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Nombre</label>
+                        <input id="inputNombre" name="nombre" type="text" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Apellido</label>
+                        <input id="inputApellido" name="apellido" type="text" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Dirección</label>
+                        <input id="inputDireccion" name="direccion" type="text" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Teléfono</label>
+                        <input id="inputTelefono" name="telefono" type="text" class="form-control" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function abrirModalNuevo() {
+            document.getElementById("inputCedula").value = '';
+            document.getElementById("inputCedula").readOnly = false;
+            document.getElementById("inputNombre").value = '';
+            document.getElementById("inputApellido").value = '';
+            document.getElementById("inputDireccion").value = '';
+            document.getElementById("inputTelefono").value = '';
+        }
+
+        function abrirModalEditar(cedula, nombre, apellido, direccion, telefono) {
+            document.getElementById("inputCedula").innerHTML = cedula;
+            document.getElementById("inputCedula").value = cedula;
+            document.getElementById("inputCedula").readOnly = true;
+            document.getElementById("inputNombre").innerHTML = nombre;
+            document.getElementById("inputNombre").value = nombre;
+            document.getElementById("inputApellido").innerHTML = apellido;
+            document.getElementById("inputApellido").value = apellido;
+            document.getElementById("inputDireccion").innerHTML = direccion;
+            document.getElementById("inputDireccion").value = direccion;
+            document.getElementById("inputTelefono").innerHTML = telefono;
+            document.getElementById("inputTelefono").value = telefono;
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".eliminar-btn").forEach(function (btn) {
                 btn.addEventListener("click", function () {
-                    const cedula = btn.getAttribute("data-cedula")
-                    if (confirm("Estas seguro de eliminar?")) {
-                        window.location.href = "/estudiante/eliminar/" + cedula
+                    const cedula = btn.getAttribute("data-cedula");
+                    console.log(cedula)
+                    if (confirm("¿Estás seguro de eliminar este estudiante?")) {
+                        window.location.href = "/user/estudiante/eliminar/" + cedula;
                     }
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".editar-btn").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    console.log(btn)
+                    const cedula = btn.getAttribute("data-cedula")
+                    const nombre = btn.getAttribute("data-nombre")
+                    const apellido = btn.getAttribute("data-apellido")
+                    const direccion = btn.getAttribute("data-direccion")
+                    const telefono = btn.getAttribute("data-telefono")
+                    console.log("Skibidi " + cedula);
+                    abrirModalEditar(cedula, nombre, apellido, direccion, telefono)
                 })
             })
         })
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
 </body>
 
