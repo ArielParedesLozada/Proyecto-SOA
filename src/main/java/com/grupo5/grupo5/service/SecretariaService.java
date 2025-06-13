@@ -20,7 +20,10 @@ public class SecretariaService {
 
     public Optional<Usuario> getByEmail(String email){
         Optional<Usuario> secretaria =  this.repository.findById(email);
-        if (secretaria.isEmpty() || !secretaria.get().getRole().equals("ROLE_secretaria")) {
+        if (secretaria.isEmpty()) {
+            return secretaria;
+        }
+        if (!secretaria.get().getRole().equals("ROLE_secretaria")) {
             throw new Error("No autorizado");
         }
         return secretaria;

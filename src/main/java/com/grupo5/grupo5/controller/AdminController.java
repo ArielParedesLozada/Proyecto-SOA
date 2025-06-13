@@ -48,7 +48,7 @@ public class AdminController {
             model.addAttribute("secretarias", List.of(secretaria));
         } else {
             model.addAttribute("secretarias", List.of());
-            model.addAttribute("mensaje", "No se encontró secretaria con la cédula: " + email);
+            model.addAttribute("mensaje", "No se encontró secretaria con el email: " + email);
         }
 
         return "secretarias";
