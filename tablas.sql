@@ -11,5 +11,5 @@ INSERT INTO usuarios VALUES (
     'admin@gmail.com',
     '$2a$10$9qM8mdTD7hz1yQUhIkWdG.4mRXv6tiCRZiPqsC6Km9K2YEQ31ic8G', --contraseña
     'Juan Paco Perez',
-    'admin'
+    'ROLE_admin'
 );
