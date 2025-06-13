@@ -7,19 +7,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/user")
+@RequiredArgsConstructor
 public class PrivateController {
-    @GetMapping("/")
+    @GetMapping("/home")
     public String home() {
-        return "privateHome";
+        return "home";
     }
-    
+
     @GetMapping("/secretarias/add")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('admin')")
     public String addSecretarias() {
-        return "add-secretaria";
+        return "secretarias";
     }
-    
+
 }
