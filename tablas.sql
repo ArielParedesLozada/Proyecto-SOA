@@ -8,15 +8,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 
 INSERT INTO usuarios VALUES (
-    'admin@admin.com',
-    '123456789',
+    'admin@gmail.com',
+    '$2a$10$9qM8mdTD7hz1yQUhIkWdG.4mRXv6tiCRZiPqsC6Km9K2YEQ31ic8G', --contraseña
     'Juan Paco Perez',
     'admin'
-);
-
-INSERT INTO usuarios VALUES (
-    'secre@secre.com',
-    '123456789',
-    'Juana Paca Perez',
-    'secretaria'
 );

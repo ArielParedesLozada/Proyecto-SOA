@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,11 +32,12 @@ public class AdminController {
         return "secretarias";
     }
 
-    @PostMapping("/secretarias")
+    @PostMapping("/secretaria")
     public String createSecretarias(@ModelAttribute Usuario usuario) {
         usuario.setRole("ROLE_secretaria");
+        usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword()));
         this.service.save(usuario);
-        return "redirect:/secretarias";
+        return "redirect:/user/admin/secretarias";
     }
 
     @GetMapping("/buscar")
